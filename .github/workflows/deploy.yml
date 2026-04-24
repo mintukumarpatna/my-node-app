@@ -8,15 +8,19 @@ on:
 env:
   AWS_REGION: ap-south-1
   CLUSTER_NAME: Testing-My-EKS
+  ECR_REPOSITORY: my-node-app
+  AWS_ACCOUNT_ID: 702358135571
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
+      # 1. Checkout code
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # 2. Configure AWS credentials
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -24,27 +28,38 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
+      # 3. Login to ECR
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v1
 
+      # 4. Build Docker image
       - name: Build Docker image
-        run: docker build -t my-node-app .
+        run: |
+          docker build -t $ECR_REPOSITORY .
 
-      - name: Tag image
-        run: docker tag my-node-app:latest 702358135571.dkr.ecr.ap-south-1.amazonaws.com/my-node-app:latest
+      # 5. Tag image
+      - name: Tag Docker image
+        run: |
+          docker tag $ECR_REPOSITORY:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:latest
 
-      - name: Push image
-        run: docker push 702358135571.dkr.ecr.ap-south-1.amazonaws.com/my-node-app:latest
+      # 6. Push image to ECR
+      - name: Push Docker image
+        run: |
+          docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:latest
 
+      # 7. Install kubectl (FIXED)
       - name: Install kubectl
         run: |
-          curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.27.0/2023-05-11/bin/linux/amd64/kubectl
+          curl -LO "https://dl.k8s.io/release/v1.29.0/bin/linux/amd64/kubectl"
           chmod +x kubectl
           sudo mv kubectl /usr/local/bin/
 
+      # 8. Update kubeconfig
       - name: Update kubeconfig
-        run: aws eks update-kubeconfig --region ap-south-1 --name Testing-My-EKS
+        run: |
+          aws eks update-kubeconfig --region $AWS_REGION --name $CLUSTER_NAME
 
+      # 9. Deploy to EKS
       - name: Deploy to EKS
         run: |
           kubectl apply -f deployment.yaml
