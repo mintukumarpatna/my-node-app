@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 
 app.get("/", (req, res) => {
-  res.send("Hello Mintu Node App 🚀");
+  res.send("CI/CD Auto Deploy Working  TESTING  LOVE IT");
 });
 
 app.listen(3000, () => {
