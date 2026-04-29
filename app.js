@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 
 app.get('/', (req, res) => {
-  res.send('doker');
+  res.send('Zero downtime CI/CD pipeline');
 });
 
 // ✅ FIX HERE
