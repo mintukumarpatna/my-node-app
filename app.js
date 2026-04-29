@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 
 app.get('/', (req, res) => {
-  res.send('mintu kumar');
+  res.send('myapp workin ci/cd');
 });
 
 // ✅ FIX HERE
