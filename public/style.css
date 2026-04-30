@@ -1,19 +1,12 @@
 body {
   margin: 0;
-  font-family: Arial;
-  background: linear-gradient(270deg, #020617, #0f172a, #020617);
-  background-size: 600% 600%;
-  animation: bgMove 10s ease infinite;
+  font-family: 'Poppins', sans-serif;
+  background: radial-gradient(circle at top, #020617, #000000);
   color: white;
   overflow: hidden;
 }
 
-@keyframes bgMove {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
+/* Center card */
 .container {
   display: flex;
   justify-content: center;
@@ -21,24 +14,63 @@ body {
   height: 100vh;
 }
 
+/* Glass card */
 .card {
-  background: rgba(255,255,255,0.05);
-  padding: 40px;
-  border-radius: 20px;
+  padding: 50px;
+  border-radius: 25px;
   text-align: center;
-  backdrop-filter: blur(10px);
-  animation: float 3s infinite;
+  backdrop-filter: blur(20px);
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 0 80px rgba(34,197,94,0.3);
+  animation: float 4s ease-in-out infinite;
 }
 
+/* Floating animation */
 @keyframes float {
   0%,100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+  50% { transform: translateY(-15px); }
 }
 
+/* Title */
+h1 {
+  font-size: 48px;
+  background: linear-gradient(90deg, #22c55e, #4ade80);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 30px rgba(34,197,94,0.7);
+}
+
+/* Badge */
 .badge {
-  background: #22c55e;
+  margin-top: 30px;
+  padding: 15px;
+  border-radius: 50px;
+  background: linear-gradient(90deg, #22c55e, #16a34a);
   color: black;
-  padding: 10px;
-  border-radius: 20px;
-  margin-top: 20px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 10px #22c55e; }
+  50% { box-shadow: 0 0 40px #22c55e; }
+  100% { box-shadow: 0 0 10px #22c55e; }
+}
+
+/* Neon moving particles */
+.particles span {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: #22c55e;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #22c55e;
+  animation: move 10s linear infinite;
+}
+
+@keyframes move {
+  0% { transform: translateY(100vh); }
+  100% { transform: translateY(-10vh); }
 }

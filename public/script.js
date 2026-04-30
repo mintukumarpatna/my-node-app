@@ -1,17 +1,20 @@
-document.getElementById("version").innerText = "Version: v1";
+// Dynamic values
+document.getElementById("version").innerText = "Version: v" + Math.floor(Math.random()*10);
 document.getElementById("hostname").innerText = "Hostname: " + window.location.hostname;
 document.getElementById("time").innerText = "Time: " + new Date().toLocaleString();
 
-// particles
+// PARTICLES (cool floating neon effect)
 const container = document.querySelector('.particles');
 
-for (let i = 0; i < 50; i++) {
+for (let i = 0; i < 80; i++) {
   const dot = document.createElement('span');
-  dot.style.position = 'absolute';
-  dot.style.width = '5px';
-  dot.style.height = '5px';
-  dot.style.background = '#22c55e';
   dot.style.left = Math.random() * 100 + '%';
-  dot.style.top = Math.random() * 100 + '%';
+  dot.style.animationDuration = (5 + Math.random() * 10) + 's';
   container.appendChild(dot);
 }
+
+// Smooth live time update
+setInterval(() => {
+  document.getElementById("time").innerText =
+    "Time: " + new Date().toLocaleString();
+}, 1000);
