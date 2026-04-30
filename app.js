@@ -1,43 +1,28 @@
-app.get('/', (req, res) => {
+const express = require('express');
+const os = require('os');
 
+const app = express();
+
+const PORT = process.env.PORT || 3000;
+
+app.get('/', (req, res) => {
   const version = process.env.VERSION || "v1";
-  const randomColor = "#" + Math.floor(Math.random()*16777215).toString(16);
+  const color = "#" + Math.floor(Math.random()*16777215).toString(16);
 
   res.send(`
-  <html>
-  <head>
-    <title>Deployment Test</title>
-    <meta http-equiv="refresh" content="2">
-    <style>
-      body {
-        background: ${randomColor};
-        color: white;
-        font-family: Arial;
-        text-align: center;
-        padding-top: 100px;
-        transition: 0.5s;
-      }
-      h1 {
-        font-size: 50px;
-      }
-      .box {
-        background: rgba(0,0,0,0.5);
-        padding: 30px;
-        border-radius: 15px;
-        display: inline-block;
-      }
-    </style>
-  </head>
-
-  <body>
-    <div class="box">
-      <h1>🚀 DEPLOYMENT TEST</h1>
+    <body style="background:${color}; color:white; text-align:center; padding-top:100px;">
+      <h1>🚀 CI/CD WORKING</h1>
       <h2>Version: ${version}</h2>
-      <p><b>Hostname:</b> ${require('os').hostname()}</p>
-      <p><b>Time:</b> ${new Date().toLocaleString()}</p>
-      <p>🔥 Color changes every refresh</p>
-    </div>
-  </body>
-  </html>
+      <p>Hostname: ${os.hostname()}</p>
+      <p>Time: ${new Date().toLocaleString()}</p>
+    </body>
   `);
+});
+
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
+});
+
+app.listen(PORT, '0.0.0.0', () => {
+  console.log("Server running...");
 });
