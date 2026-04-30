@@ -6,7 +6,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.get('/', (req, res) => {
-  const version = process.env.VERSION || "v1";
+  const version = process.env.VERSION || "v2";
   const color = "#" + Math.floor(Math.random()*16777215).toString(16);
 
   res.send(`
