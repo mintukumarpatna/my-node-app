@@ -39,6 +39,7 @@ app.get('/', (req, res) => {
       <body>
         <div class="box">
           <h1>Zero Downtime CI/CD Pipeline</h1>
+          >p>mintu kumar</p>
           <p>Server is running successfully</p>
           <p><b>Hostname:</b> ${os.hostname()}</p>
           <p><b>Time:</b> ${new Date().toLocaleString()}</p>
