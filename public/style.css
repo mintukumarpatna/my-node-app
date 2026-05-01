@@ -5,34 +5,34 @@ body {
   color: white;
 }
 
-/* 🌈 Dynamic animated gradient */
+/* 🌄 Cinematic Background */
 .bg {
   position: fixed;
   width: 100%;
   height: 100%;
-  background: linear-gradient(-45deg, #020617, #0f172a, #022c22, #020617);
-  background-size: 400% 400%;
-  animation: gradientMove 15s ease infinite;
+  background:
+    linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.85)),
+    url('images/bg.jpg') center/cover no-repeat;
   z-index: -2;
+  animation: zoom 20s ease-in-out infinite alternate;
 }
 
-@keyframes gradientMove {
-  0% { background-position: 0% }
-  50% { background-position: 100% }
-  100% { background-position: 0% }
+@keyframes zoom {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.1); }
 }
 
-/* ✨ Glow overlay (depth feel) */
+/* Glow layer */
 body::before {
   content: "";
   position: absolute;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at center, rgba(34,197,94,0.15), transparent 70%);
+  background: radial-gradient(circle, rgba(34,197,94,0.2), transparent 70%);
   z-index: -1;
 }
 
-/* 📦 Center container */
+/* Center */
 .container {
   display: flex;
   justify-content: center;
@@ -40,41 +40,51 @@ body::before {
   height: 100vh;
 }
 
-/* 💎 Glass card */
+/* Glass Card */
 .card {
   padding: 50px;
   border-radius: 30px;
   text-align: center;
   backdrop-filter: blur(25px);
-  background: rgba(255,255,255,0.05);
+  background: rgba(255,255,255,0.08);
   border: 1px solid rgba(255,255,255,0.1);
-  box-shadow: 0 0 60px rgba(34,197,94,0.2);
-  transition: all 0.4s ease;
+  box-shadow: 0 0 80px rgba(34,197,94,0.3);
+  transition: 0.4s;
 }
 
-/* 🎮 Hover (3D feel) */
+/* Hover 3D */
 .card:hover {
   transform: perspective(800px) rotateX(5deg) rotateY(5deg) scale(1.05);
-  box-shadow: 0 0 120px rgba(34,197,94,0.5);
 }
 
-/* 🚀 Title glow */
+/* 🔥 Logo */
+.logo {
+  width: 90px;
+  margin-bottom: 15px;
+  border-radius: 50%;
+  box-shadow: 0 0 25px rgba(34,197,94,0.8);
+  animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Title */
 h1 {
-  font-size: 46px;
-  margin-bottom: 10px;
+  font-size: 45px;
   background: linear-gradient(90deg, #22c55e, #4ade80);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 25px rgba(34,197,94,0.8);
 }
 
-/* 📊 Text */
+/* Text */
 .card p {
-  font-size: 16px;
-  opacity: 0.85;
+  opacity: 0.9;
 }
 
-/* ⚡ Badge */
+/* Badge */
 .badge {
   margin-top: 25px;
   padding: 14px;
@@ -82,7 +92,6 @@ h1 {
   background: linear-gradient(90deg, #22c55e, #16a34a);
   color: black;
   font-weight: bold;
-  letter-spacing: 1px;
   animation: pulse 2s infinite;
 }
 
@@ -90,39 +99,4 @@ h1 {
   0% { box-shadow: 0 0 10px #22c55e; }
   50% { box-shadow: 0 0 60px #22c55e; }
   100% { box-shadow: 0 0 10px #22c55e; }
-}
-
-/* 🔊 Button */
-button {
-  margin-top: 25px;
-  padding: 12px 25px;
-  border: none;
-  border-radius: 25px;
-  background: linear-gradient(90deg, #22c55e, #4ade80);
-  color: black;
-  cursor: pointer;
-  font-weight: bold;
-  transition: all 0.3s;
-}
-
-button:hover {
-  transform: scale(1.15);
-  box-shadow: 0 0 25px #22c55e;
-}
-
-/* 🎇 Smooth particles */
-.particles span {
-  position: absolute;
-  width: 3px;
-  height: 3px;
-  background: #22c55e;
-  border-radius: 50%;
-  box-shadow: 0 0 8px #22c55e;
-  animation: floatUp linear infinite;
-}
-
-@keyframes floatUp {
-  0% { transform: translateY(100vh) scale(0); opacity: 0; }
-  20% { opacity: 1; }
-  100% { transform: translateY(-10vh) scale(1); opacity: 0; }
 }
