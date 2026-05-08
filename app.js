@@ -32,7 +32,7 @@ app.get('*', (req, res) => {
 // Start server
 const server = app.listen(PORT, HOST, () => {
   console.log('====================================');
-  console.log('🚀 Server Started Successfully!');
+  console.log('🚀 I LOVE YOU!');
   console.log(`🌐 URL: http://${HOST}:${PORT}`);
   console.log(`🖥️ Hostname: ${os.hostname()}`);
   console.log(`⏱️ Time: ${new Date().toLocaleString()}`);
