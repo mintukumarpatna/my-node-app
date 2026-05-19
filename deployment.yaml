@@ -1,5 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
+
 metadata:
   name: my-node-app
 
@@ -8,6 +9,7 @@ spec:
 
   strategy:
     type: RollingUpdate
+
     rollingUpdate:
       maxUnavailable: 0
       maxSurge: 1
@@ -24,24 +26,19 @@ spec:
     spec:
       containers:
         - name: my-node-app
-          image: mintukumarpatan/my-node-app:1   # initial only
+
+          image: 702358135571.dkr.ecr.us-east-1.amazonaws.com/my-node-app:latest
+
           imagePullPolicy: Always
 
           ports:
             - containerPort: 3000
 
-          resources:
-            requests:
-              cpu: "100m"
-              memory: "128Mi"
-            limits:
-              cpu: "500m"
-              memory: "256Mi"
-
           readinessProbe:
             httpGet:
               path: /health
               port: 3000
+
             initialDelaySeconds: 5
             periodSeconds: 5
 
@@ -49,5 +46,6 @@ spec:
             httpGet:
               path: /health
               port: 3000
+
             initialDelaySeconds: 15
             periodSeconds: 10

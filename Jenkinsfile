@@ -2,8 +2,15 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "mintukumarpatan/my-node-app"
+        AWS_REGION = "us-east-1"
+        AWS_ACCOUNT_ID = "702358135571"
+
+        IMAGE_NAME = "my-node-app"
         IMAGE_TAG = "${BUILD_NUMBER}"
+
+        ECR_REPO = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${IMAGE_NAME}"
+
+        KUBECONFIG = "/var/lib/jenkins/.kube/config"
     }
 
     stages {
@@ -16,16 +23,58 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh "docker build --no-cache -t $IMAGE_NAME:$IMAGE_TAG ."
+                sh """
+                docker build --no-cache -t ${IMAGE_NAME}:${IMAGE_TAG} .
+                """
             }
         }
 
-        stage('Push to Docker Hub') {
+        stage('Login to AWS ECR') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
-                    sh "echo $PASS | docker login -u $USER --password-stdin"
-                    sh "docker push $IMAGE_NAME:$IMAGE_TAG"
-                }
+                sh """
+                aws ecr get-login-password --region ${AWS_REGION} | \
+                docker login --username AWS --password-stdin \
+                ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
+                """
+            }
+        }
+
+        stage('Tag Docker Image') {
+            steps {
+                sh """
+                docker tag ${IMAGE_NAME}:${IMAGE_TAG} \
+                ${ECR_REPO}:${IMAGE_TAG}
+
+                docker tag ${IMAGE_NAME}:${IMAGE_TAG} \
+                ${ECR_REPO}:latest
+                """
+            }
+        }
+
+        stage('Push to ECR') {
+            steps {
+                sh """
+                docker push ${ECR_REPO}:${IMAGE_TAG}
+                docker push ${ECR_REPO}:latest
+                """
+            }
+        }
+
+        stage('Update Kubeconfig') {
+            steps {
+                sh """
+                aws eks update-kubeconfig \
+                --region ${AWS_REGION} \
+                --name my-cluster
+                """
+            }
+        }
+
+        stage('Check Kubernetes Connection') {
+            steps {
+                sh """
+                kubectl get nodes
+                """
             }
         }
 
@@ -33,14 +82,16 @@ pipeline {
             steps {
                 sh """
                 kubectl set image deployment/my-node-app \
-                my-node-app=$IMAGE_NAME:$IMAGE_TAG
+                my-node-app=${ECR_REPO}:${IMAGE_TAG}
                 """
             }
         }
 
         stage('Verify Deployment') {
             steps {
-                sh "kubectl rollout status deployment/my-node-app"
+                sh """
+                kubectl rollout status deployment/my-node-app
+                """
             }
         }
     }
